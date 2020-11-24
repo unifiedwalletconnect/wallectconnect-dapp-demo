@@ -6,7 +6,7 @@ interface IBlockieStyleProps {
 }
 
 interface IBlockieProps extends IBlockieStyleProps {
-  address: string;
+  account: string;
 }
 
 const SBlockieWrapper = styled.div<IBlockieStyleProps>`
@@ -23,7 +23,7 @@ const SBlockieWrapper = styled.div<IBlockieStyleProps>`
 `;
 
 const Blockie = (props: IBlockieProps) => {
-  const seed = props.address.toLowerCase() || "";
+  const seed = props.account.toLowerCase() || "";
   const imgUrl = window.blockies
     .create({
       seed,
@@ -31,13 +31,13 @@ const Blockie = (props: IBlockieProps) => {
     .toDataURL();
   return (
     <SBlockieWrapper {...props} size={props.size}>
-      <img src={imgUrl} alt={props.address} />
+      <img src={imgUrl} alt={props.account} />
     </SBlockieWrapper>
   );
 };
 
 Blockie.defaultProps = {
-  address: "0x0000000000000000000000000000000000000000",
+  account: "0x0000000000000000000000000000000000000000",
   size: 30,
 };
 

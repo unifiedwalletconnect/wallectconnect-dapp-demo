@@ -1,9 +1,8 @@
 import * as React from "react";
 import styled from "styled-components";
-import * as PropTypes from "prop-types";
 import Blockie from "./Blockie";
 import Banner from "./Banner";
-import { ellipseAddress, getChainData } from "../helpers/utilities";
+import { ellipseAddress, getNetworkData } from "../helpers/utilities";
 import { transitions } from "../styles";
 
 const SHeader = styled.div`
@@ -75,27 +74,28 @@ const SDisconnect = styled.div<IHeaderStyle>`
 interface IHeaderProps {
   killSession: () => void;
   connected: boolean;
-  address: string;
-  chainId: number;
+  chain: string;
+  network: string;
+  account: string;
 }
 
 const Header = (props: IHeaderProps) => {
-  const { connected, address, chainId, killSession } = props;
-  const activeChain = chainId ? getChainData(chainId).name : null;
+  const { connected, chain, network, account, killSession } = props;
+  const networkName = chain && network ? getNetworkData(chain, network).name : null;
   return (
     <SHeader {...props}>
-      {connected && activeChain ? (
+      {connected && networkName ? (
         <SActiveChain>
           <p>{`Connected to`}</p>
-          <p>{activeChain}</p>
+          <p>{networkName}</p>
         </SActiveChain>
       ) : (
         <Banner />
       )}
-      {address && (
+      {account && (
         <SActiveAccount>
-          <SBlockie address={address} />
-          <SAddress connected={connected}>{ellipseAddress(address)}</SAddress>
+          <SBlockie account={account} />
+          <SAddress connected={connected}>{ellipseAddress(account)}</SAddress>
           <SDisconnect connected={connected} onClick={killSession}>
             {"Disconnect"}
           </SDisconnect>
@@ -103,11 +103,6 @@ const Header = (props: IHeaderProps) => {
       )}
     </SHeader>
   );
-};
-
-Header.propTypes = {
-  killSession: PropTypes.func.isRequired,
-  address: PropTypes.string,
 };
 
 export default Header;
